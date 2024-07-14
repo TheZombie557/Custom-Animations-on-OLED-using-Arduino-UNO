@@ -50,12 +50,72 @@ Save the resized images.
 Converting Images to Bitmap
 
 Convert the resized images to bitmap (.bmp) format using IrfanView:
+
 Open the resized image in IrfanView.
+
 Go to File > Save As.
+
 Select Bitmap as the file type and save the image.
+
 -----------------------
-CODE:
-{use the example code attached to the repository for reference }
+# CODE:
+```
+#include <Adafruit_GFX.h>
+#include <Adafruit_SH1106.h>
+#include <Wire.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET 4
+Adafruit_SH1106 display(OLED_RESET);
+
+int xx=30;
+int yy=20;
+int tt=100;
+
+const unsigned char PROGMEM frame0 [] = ("Bitmap code"}
+const unsigned char PROGMEM frame1 [] = ("Bitmap code"}
+...
+const unsigned char PROGMEM framex [] = ("Bitmap code"}
+void setup() {
+  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
+  display.display();
+  delay(2000);
+
+}
+
+void loop()
+{
+  for (int i = 0; i < 11; i++)
+   {
+    display.clearDisplay();
+    
+    // Display the string
+    display.setTextSize(2);
+    display.setTextColor(WHITE);
+    display.setCursor(5,0);
+    String text = "LY! ";
+    display.println(text);
+    
+    // Display the animation frame
+    display.drawBitmap(xx, yy, getFrame(i), 48, 48, 1);
+    display.display();
+    delay(tt);
+   }
+}
+
+const unsigned char* getFrame(int frameIndex) {
+  switch (frameIndex) {
+    case 0: return frame0;
+    case 1: return frame1;
+    ...
+    case x: return framex;
+    default: return frame0;
+  }
+}
+```
+{use the example sketch attached to the repository for reference }
+
 optional : This project will display a custom message or an animation depending on the push button state.
 -----------
 # NOTE
